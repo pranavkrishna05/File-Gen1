@@ -1,13 +1,12 @@
-from app.utils.database import Base
-from sqlalchemy import Column, String, Integer
+from typing import Optional
+from pydantic import BaseModel, EmailStr, Field
 
-class User {
+class User(BaseModel):
     """
-    Database model for a user.
+    Represents a user domain object with attributes enforced by validation criteria.
     """
-    __tablename__ = 'users'
+    email: EmailStr = Field(..., description="Unique email address of the user.")
+    password: str = Field(..., min_length=8, max_length=128, description="Password for the user account with complexity requirements.")
 
-    id = Column(Integer, primary_key=True, autoincrement=True)
-    email = Column(String(255), nullable=False, unique=True)
-    password = Column(String(255), nullable=False)
-}
+    def __str__(self) -> str:
+        return f"User(email={self.email})"
